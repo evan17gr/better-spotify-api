@@ -1,0 +1,19 @@
+{
+  "type": "mysql",
+  "host": "",
+  "port": 3306,
+  "username": "",
+  "password": "",
+  "database": "",
+  "synchronize": false,
+  "logging": true,
+  "entities": ["dist/src/**/*entity.{ts,js}"],
+  "migrationsTableName": "migrations",
+  "migrations": ["build/db/migrations/*.{ts,js}"],
+  "cli": {
+    "migrationsDir": "migration",
+    "entitiesDir": "src/entity"
+  }
+}
+
+//this is an example of a orm.config for typeorm
