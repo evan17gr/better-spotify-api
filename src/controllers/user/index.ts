@@ -120,7 +120,6 @@ export async function refreshToken(req: Request, res: Response, next: (arg0: unk
       refresh_token = cookiesToObject(cookies)['refresh_token'];
     }
 
-    console.log(refresh_token, 'refresh_token');
     const body = new URLSearchParams({
       grant_type: 'refresh_token',
       refresh_token,
@@ -154,11 +153,31 @@ export async function refreshToken(req: Request, res: Response, next: (arg0: unk
   }
 }
 
-export async function logout(_req: Request, res: Response, next: (arg0: unknown) => void) {
+export async function logout(req: Request, res: Response, next: (arg0: unknown) => void) {
   try {
-    res.json('Hello');
+    const cookies = req.headers.cookie;
+    const access_token = cookies && cookiesToObject(cookies)['access_token'];
+    const refresh_token = cookies && cookiesToObject(cookies)['refresh_token'];
+
+    if (!cookies || !access_token || !refresh_token) {
+      res.status(404).send({ message: 'You are not able to logout at this moment' });
+    }
+    res.cookie('access_token', 'invalid', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: true,
+      maxAge: 0,
+    });
+    res.cookie('refresh_token', 'invalid', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: true,
+      maxAge: 0,
+    });
+    console.log('logout');
+    return res.status(200).send({ message: 'You have successfully logged out' });
   } catch (err: any) {
-    console.error(`Error while deleting programming language`, err.message);
+    res.status(404).send({ message: 'You are not able to logout at this moment' });
     next(err);
   }
 }
