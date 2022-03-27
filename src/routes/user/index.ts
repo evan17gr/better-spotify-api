@@ -1,17 +1,11 @@
 import * as express from 'express';
-import { login, logout, getProfile, refreshToken, callback } from '../../controllers/user/index.js';
+import { getProfile, getTopItems } from '../../controllers/user/index.js';
 import { checkAccessToken } from '../../middlewares/auth.js';
 
 const router = express.Router();
 
-router.get('/login', login);
+router.get('/profile/:userId', checkAccessToken, getProfile);
 
-router.get('/callback', callback);
-
-router.get('/refresh_token', refreshToken);
-
-router.get('/logout', logout);
-
-router.get('/profile', checkAccessToken, getProfile);
+router.get('/getTopItems/:type', checkAccessToken, getTopItems);
 
 export default router;

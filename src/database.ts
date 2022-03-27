@@ -1,6 +1,15 @@
-import typeorm from 'typeorm';
-const { createConnection } = typeorm;
+import pkg from '@prisma/client';
+const { PrismaClient } = pkg;
+let prisma;
 
-export const connectDB = async () => {
-  await createConnection();
-};
+if (process.env.NODE_ENV === 'production') {
+  prisma = new PrismaClient();
+} else {
+  if (!global.prisma) {
+    global.prisma = new PrismaClient();
+  }
+
+  prisma = global.prisma;
+}
+
+export default prisma;

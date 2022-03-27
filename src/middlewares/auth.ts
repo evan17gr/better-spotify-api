@@ -17,6 +17,5 @@ export const checkAccessToken = (req: Request, res: Response, next: NextFunction
   if (access_token !== bearerToken) {
     return res.status(401).send({ error: 'Token has expired' });
   }
-  res.status(200).send({ access_token });
   next();
 };
